@@ -1,9 +1,13 @@
 import Core
 import Foundation
 
-struct Day01: AdventDay {
-  private let data: [Int]
+extension Year2025 {
+  struct Day01 {
+    private let data: [Int]
+  }
+}
 
+extension Year2025.Day01: AdventDay {
   init(data: String) {
     self.data =
       data

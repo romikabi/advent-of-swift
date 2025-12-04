@@ -4,13 +4,11 @@ import ArgumentParser
 import Core
 
 // Add each new day implementation to this array:
-private let allChallenges: [any AdventDay.Type] = [
-  Day00(),
-  Day01(),
-  Day02(),
-  Day03(),
-  Day04(),
-]
+private let allChallenges: [any AdventDay.Type] =
+  [
+    Day00()
+  ]
+  + Year2025.challenges
 
 @main
 struct AdventOfCode: AsyncParsableCommand {

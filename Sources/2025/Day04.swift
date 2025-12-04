@@ -1,9 +1,13 @@
 import Core
 import Foundation
 
-struct Day04: AdventDay {
-  private let data: [[Bool]]
+extension Year2025 {
+  struct Day04 {
+    private let data: [[Bool]]
+  }
+}
 
+extension Year2025.Day04: AdventDay {
   init(data: String) {
     self.data = data.split(separator: "\n").map { line in
       line.map { $0 == "@" }

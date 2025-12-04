@@ -1,9 +1,13 @@
 import Core
 import Foundation
 
-struct Day03: AdventDay {
-  private let data: [[Int]]
+extension Year2025 {
+  struct Day03 {
+    private let data: [[Int]]
+  }
+}
 
+extension Year2025.Day03: AdventDay {
   init(data: String) {
     self.data = data.split(separator: "\n").map { line in
       line.compactMap { Int(String($0)) }

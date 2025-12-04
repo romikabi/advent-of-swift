@@ -1,9 +1,13 @@
 import Core
 import Foundation
 
-struct Day02: AdventDay {
-  private let data: [ClosedRange<UInt>]
+extension Year2025 {
+  struct Day02 {
+    private let data: [ClosedRange<UInt>]
+  }
+}
 
+extension Year2025.Day02: AdventDay {
   init(data: String) {
     self.data = data.split(separator: ",").compactMap { range -> ClosedRange<UInt>? in
       let numbers = range.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "-")
