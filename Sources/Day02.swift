@@ -1,3 +1,4 @@
+import Core
 import Foundation
 
 struct Day02: AdventDay {

@@ -1,4 +1,5 @@
 import Algorithms
+import Core
 
 struct Day00: AdventDay {
   // Save your data in a corresponding text file in the `Data` directory.

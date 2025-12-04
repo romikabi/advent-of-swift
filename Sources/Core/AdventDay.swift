@@ -1,15 +1,20 @@
-@_exported import Algorithms
-@_exported import Collections
 import Foundation
+import RegexBuilder
 
-protocol AdventDay: Sendable {
+public protocol AdventDay: Sendable {
   associatedtype Answer = Int
 
   /// The day of the Advent of Code challenge.
   ///
   /// You can implement this property, or, if your type is named with the
-  /// day number as its suffix (like `Day01`), it is derived automatically.
+  /// day number following `Day` (like `Day01`), it is derived automatically.
   static var day: Int { get }
+
+  /// The year of the Advent of Code challenge.
+  ///
+  /// You can implement this property, or, if your type is named with the
+  /// year number following `Year` (like `Day01Year2015`), it is derived automatically.
+  static var year: Int? { get }
 
   /// An initializer that uses the provided test data.
   init(data: String)
@@ -21,46 +26,66 @@ protocol AdventDay: Sendable {
   func part2() async throws -> Answer
 }
 
-struct PartUnimplemented: Error {
-  let day: Int
-  let part: Int
+public struct PartUnimplemented: Error {
+  public let day: Int
+  public let part: Int
 }
 
 extension AdventDay {
   // Find the challenge day from the type name.
-  static var day: Int {
-    let typeName = String(reflecting: Self.self)
-    guard let i = typeName.lastIndex(where: { !$0.isNumber }),
-      let day = Int(typeName[i...].dropFirst())
+  public static var day: Int {
+    guard let day = getNumberFromTypeName(prefixedBy: "Day")
     else {
       fatalError(
         """
         Day number not found in type name: \
         implement the static `day` property \
-        or use the day number as your type's suffix (like `Day3`).")
+        or use the day number in your type's name following `Day` (like `Day03`).")
         """)
     }
     return day
   }
 
-  var day: Int {
+  public static var year: Int? {
+    getNumberFromTypeName(prefixedBy: "Year")
+  }
+
+  private static func getNumberFromTypeName(prefixedBy prefix: String) -> Int? {
+    let typeName = String(reflecting: Self.self)
+    let regex = Regex {
+      prefix
+      ZeroOrMore("0")
+      Capture {
+        OneOrMore(.digit)
+      }
+    }
+    guard let match = typeName.firstMatch(of: regex) else { return nil }
+    return Int(match.output.1)
+  }
+
+  public var day: Int {
     Self.day
+  }
+
+  public var year: Int? {
+    Self.year
   }
 
   // Default implementation of `part2`, so there aren't interruptions before
   // working on `part1()`.
-  func part2() throws -> Answer {
+  public func part2() throws -> Answer {
     throw PartUnimplemented(day: day, part: 2)
   }
 
   /// An initializer that loads the test data from the corresponding data file.
-  init() {
-    self.init(data: Self.loadData(challengeDay: Self.day))
+  public init() {
+    self.init(data: Self.loadData())
   }
 
-  static func loadData(challengeDay: Int) -> String {
-    let dayString = String(format: "%02d", challengeDay)
-    let dataFilename = "Day\(dayString)"
+  public static func loadData() -> String {
+    let dayString = String(format: "Day%02d", day)
+    let yearString = year.map { String(format: "Year%04d", $0) }
+    let dataFilename = dayString + (yearString ?? "")
     let dataURL = Bundle.module.url(
       forResource: dataFilename,
       withExtension: "txt",

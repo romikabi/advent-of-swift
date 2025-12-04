@@ -14,17 +14,29 @@ let package = Package(
     .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
     .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.4"),
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),
-    .package(url: "https://github.com/swiftlang/swift-format.git", from: "600.0.0"),
+    .package(url: "https://github.com/swiftlang/swift-format.git", from: "602.0.0"),
   ],
   targets: [
+    .target(
+      name: "Core",
+      dependencies: dependencies,
+      resources: [.copy("../Data")]
+    ),
+    .testTarget(
+      name: "CoreTests",
+      dependencies: ["Core"] + dependencies
+    ),
     .executableTarget(
       name: "AdventOfCode",
-      dependencies: dependencies,
-      resources: [.copy("Data")]
+      dependencies: ["Core"] + dependencies,
+      path: "Sources",
+      exclude: ["Core"]
     ),
     .testTarget(
       name: "AdventOfCodeTests",
-      dependencies: ["AdventOfCode"] + dependencies
+      dependencies: ["AdventOfCode"] + dependencies,
+      path: "Tests",
+      exclude: ["CoreTests"]
     )
   ],
   swiftLanguageModes: [.v6]

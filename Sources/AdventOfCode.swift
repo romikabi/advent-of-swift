@@ -1,7 +1,10 @@
+@_exported import Algorithms
 import ArgumentParser
+@_exported import Collections
+import Core
 
 // Add each new day implementation to this array:
-let allChallenges: [any AdventDay] = [
+private let allChallenges: [any AdventDay] = [
   Day00(),
   Day01(),
   Day02(),
@@ -14,31 +17,14 @@ struct AdventOfCode: AsyncParsableCommand {
   @Argument(help: "The day of the challenge. For December 1st, use '1'.")
   var day: Int?
 
+  @Argument(help: "The year of the challenge.")
+  var year: Int?
+
   @Flag(help: "Benchmark the time taken by the solution")
   var benchmark: Bool = false
 
   @Flag(help: "Run all the days available")
   var all: Bool = false
-
-  /// The selected day, or the latest day if no selection is provided.
-  var selectedChallenge: any AdventDay {
-    get throws {
-      if let day {
-        if let challenge = allChallenges.first(where: { $0.day == day }) {
-          return challenge
-        } else {
-          throw ValidationError("No solution found for day \(day)")
-        }
-      } else {
-        return latestChallenge
-      }
-    }
-  }
-
-  /// The latest challenge in `allChallenges`.
-  var latestChallenge: any AdventDay {
-    allChallenges.max(by: { $0.day < $1.day })!
-  }
 
   func run<T>(part: () async throws -> T, named: String) async -> Duration {
     var result: Result<T, Error>?
@@ -65,11 +51,17 @@ struct AdventOfCode: AsyncParsableCommand {
       if all {
         allChallenges
       } else {
-        try [selectedChallenge]
+        try [
+          ChallengeSelector(
+            day: day,
+            year: year,
+            challenges: allChallenges
+          ).selectedChallenge
+        ]
       }
 
     for challenge in challenges {
-      print("Executing Advent of Code challenge \(challenge.day)...")
+      print("Executing Advent of Code challenge \(type(of: challenge))...")
 
       let timing1 = await run(part: challenge.part1, named: "Part 1")
       let timing2 = await run(part: challenge.part2, named: "Part 2")
