@@ -8,6 +8,7 @@ private let allChallenges: [any AdventDay.Type] =
   [
     Day00.self
   ]
+  + Year2023.challenges
   + Year2025.challenges
 
 @main
@@ -61,7 +62,7 @@ struct AdventOfCode: AsyncParsableCommand {
     for challengeType in challengeTypes {
       let day = challengeType.day
       let year = challengeType.year ?? 0
-      print("Executing Advent of Code \(year != 0 ? "\(year) " : " ")challenge \(day)...")
+      print("Executing Advent of Code \(year != 0 ? "\(year) " : "")challenge \(day)...")
       let challenge = try challengeType.init()
 
       let timing1 = await run(part: challenge.part1, named: "Part 1")

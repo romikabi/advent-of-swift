@@ -86,7 +86,7 @@ extension AdventDay {
   public static func loadData() throws -> String {
     let dayString = String(format: "Day%02d", day)
     let dataURL: URL
-    if let year {
+    if let year, year != 0 {
       let yearString = String(format: "Year%04d", year)
       let url =
         // Data/Year0000Day00.txt
