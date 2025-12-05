@@ -1,10 +1,10 @@
-# Advent of Code Swift Starter Project
+# Advent of Swift
 
 [![Language](https://img.shields.io/badge/language-Swift-red.svg)](https://swift.org)
 
-Daily programming puzzles at [Advent of Code](<https://adventofcode.com/>), by
-[Eric Wastl](<http://was.tl/>). This is a small example starter project for
-building Advent of Code solutions.
+Daily programming puzzles at [Advent of Code](<https://adventofcode.com/>), by [Eric Wastl](<http://was.tl/>). 
+These are my solutions based on the [swiftlang/swift-aoc-starter-example](https://github.com/swiftlang/swift-aoc-starter-example) starter project,
+modified to allow running solutions from different years.
 
 ## Usage
 
@@ -33,15 +33,21 @@ The challenges assume three files (replace 00 with the day of the challenge).
 - `Sources/Day00.swift`: the code to solve the challenge
 - `Tests/Day00.swift`: any unit tests that you want to include
 
+Or, if you want to host multiple years of challenges in the same repository:
+
+- `Sources/Data/0000/Day00.txt`: the input data provided for the challenge
+- `Sources/Year0000Day00.swift`: the code to solve the challenge
+- `Tests/Year0000Day00.swift`: any unit tests that you want to include
+
 To start a new day's challenge, make a copy of these files, updating 00 to the 
 day number.
 
 ```diff
 // Add each new day implementation to this array:
-let allChallenges: [any AdventDay] = [
--  Day00()
-+  Day00(),
-+  Day01(),
+let allChallenges: [any AdventDay.Type] = [
+-  Day00.self
++  Day00.self,
++  Day01.self,
 ]
 ```
 
